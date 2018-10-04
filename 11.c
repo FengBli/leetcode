@@ -1,4 +1,4 @@
-// TODO: brute force
+// brute force
 int maxArea(int* height, int heightSize) {
     int i, j;
     int maxArea, curArea;
