@@ -1,20 +1,20 @@
 ## leetcode刷题记录
 
-### AC
-- 11
-- 12
-- 2
-- 20
-- 21
-- 34
-- 36
-- 5
-- 6
-- 67
-- 707
-- 725
-- 8
+### 1. \#(AC)
+> 32
 
-### TODO
-- 17
-- 24
+- Easy: 21
+- Medium    : 11
+
+### 2. TODO list
+- [] [medium]24 Swap nodes in pairs
+- [] [easy]168 Excel number convert to title
+- [] [medium] 43 string multiplication
+
+### 3. Notes
+
+#### 3.1. [17 phone letter combinations]
+
+>char** letterCombinations(char* digits, int* returnSize){...}
+
+DO NOT malloc addr-space for returnSize. I've been stuck on this for nearly an hour. ~returnSize = (int*) malloc(sizeof(int));~
