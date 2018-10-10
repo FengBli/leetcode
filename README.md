@@ -1,10 +1,10 @@
 ## leetcode刷题记录
 
 ### 1. \#(AC)
-> 32
+> 35
 
 - Easy: 21
-- Medium    : 11
+- Medium    : 12
 
 ### 2. TODO list
 - [] [medium]24 Swap nodes in pairs

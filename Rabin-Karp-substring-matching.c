@@ -67,7 +67,7 @@ void search(char pat[], char txt[], int q)
         } 
     } 
 } 
-  MMMMMMMMM
+
 /* Driver program to test above function */
 int main() 
 { 
