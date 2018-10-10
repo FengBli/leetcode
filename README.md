@@ -1,15 +1,14 @@
 ## leetcode刷题记录
 
 ### 1. \#(AC)
-> 35
+> 37
 
-- Easy: 21
-- Medium    : 12
+- Easy: 23
+- Medium: 14
 
 ### 2. TODO list
-- [] [medium]24 Swap nodes in pairs
-- [] [easy]168 Excel number convert to title
-- [] [medium] 43 string multiplication
+- [ ] [easy]168 Excel number convert to title
+- [ ] [medium] 43 string multiplication
 
 ### 3. Notes
 
