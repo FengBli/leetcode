@@ -10,6 +10,7 @@
 typedef struct ListNode* ListNodePtr;
 
 struct ListNode* swapPairs(struct ListNode* head) {
+    
     if(!head || !head->next) // one or zero node
         return head;
 

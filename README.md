@@ -1,10 +1,10 @@
 ## leetcode刷题记录
 
 ### 1. \#(AC)
-> 37
+> 41
 
 - Easy: 23
-- Medium: 14
+- Medium: 16
 
 ### 2. TODO list
 - [ ] [easy]168 Excel number convert to title
@@ -14,6 +14,6 @@
 
 #### 3.1. [17 phone letter combinations]
 
->char** letterCombinations(char* digits, int* returnSize){...}
+> char** letterCombinations(char* digits, int* returnSize){...}
 
 DO NOT malloc addr-space for returnSize. I've been stuck on this for nearly an hour. ~returnSize = (int*) malloc(sizeof(int));~

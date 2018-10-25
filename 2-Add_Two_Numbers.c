@@ -14,14 +14,14 @@ struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2) {
     p = l1;
     q = l2;
 
-    int flag, sum;
-    flag = 0;
+    int carry, sum;
+    carry = 0;
     while(p && q) {
-        sum = p->val + q->val + flag;
-        flag = false;
+        sum = p->val + q->val + carry;
+        carry = false;
 
         if(sum >= 10) {
-            flag = 1;
+            carry = 1;
             sum %= 10;
         }
         p->val = sum;
@@ -35,11 +35,11 @@ struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2) {
 
     if(p) {
         while(p) {
-            sum = flag + p->val;
-            flag = false;
+            sum = carry + p->val;
+            carry = false;
 
             if(sum >= 10) {
-                flag = 1;
+                carry = 1;
                 sum %= 10;
             }
             p->val = sum;
@@ -49,19 +49,22 @@ struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2) {
 
             p = p->next;
         }
-        if(flag) {
+
+        if(carry) {
             r->next = (ListNodePtr) malloc(sizeof(struct ListNode));
             r->next->val = 1;
             r->next->next = NULL;
         }
+
         return l1;
     } else {
+        
         while(q) {
-            sum = flag + q->val;
-            flag = false;
+            sum = carry + q->val;
+            carry = false;
 
             if(sum >= 10) {
-                flag = 1;
+                carry = 1;
                 sum %= 10;
             }
             q->val = sum;
@@ -72,11 +75,12 @@ struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2) {
             q = q->next;
         }
 
-        if(flag) {
+        if(carry) {
             r->next = (ListNodePtr) malloc(sizeof(struct ListNode));
             r->next->val = 1;
             r->next->next = NULL;
         }
+
         return l2;
     }
 }
