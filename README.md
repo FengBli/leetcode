@@ -1,10 +1,10 @@
 ## leetcode刷题记录
 
 ### 1. \#(AC)
-> 41
+> 43
 
 - Easy: 23
-- Medium: 16
+- Medium: 20
 
 ### 2. TODO list
 - [ ] [easy]168 Excel number convert to title
