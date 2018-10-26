@@ -1,3 +1,5 @@
+#include <stdlib.h> 
+#include <stdbool.h> 
 // brute force
 int* twoSum(int* nums, int numsSize, int target) {
     int i, j, flag = 0;
