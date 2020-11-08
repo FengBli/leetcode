@@ -1,0 +1,13 @@
+*.slo
+*.o
+*.out
+
+# test case input and output
+0tc.in
+0tc.out
+
+# vscode configuration
+.vscode/*
+.vscode
+
+.DS_Store
