@@ -1,7 +1,7 @@
 /*
- * @lc app=leetcode.cn id=15 lang=cpp
+ * @lc app=leetcode.cn id=18 lang=cpp
  *
- * [15] 三数之和
+ * [18] 四数之和
  */
 #pragma GCC optimize("Ofast")
 #include "bits/stdc++.h"
@@ -58,13 +58,6 @@ void debug_out(Head H, Tail... T) {
 #else
 #define dbg(...) {}
 #endif
-struct ListNode {
-    int val;
-    ListNode *next;
-    ListNode() : val(0), next(nullptr) {}
-    ListNode(int x) : val(x), next(nullptr) {}
-    ListNode(int x, ListNode *next) : val(x), next(next) {}
- };
 
 void trimLeftTrailingSpaces(string &input) {
     input.erase(input.begin(), find_if(input.begin(), input.end(), [](int ch) {
@@ -92,76 +85,97 @@ vector<int> stringToIntegerVector(string input) {
     }
     return output;
 }
-ListNode* stringToListNode(string input) {
-    // Generate list from the input
-    vector<int> list = stringToIntegerVector(input);
 
-    // Now convert that list into linked list
-    ListNode* dummyRoot = new ListNode(0);
-    ListNode* ptr = dummyRoot;
-    for(int item : list) {
-        ptr->next = new ListNode(item);
-        ptr = ptr->next;
+vector<string> stringToStringVector(string input) {
+    vector<string> output;
+    trimLeftTrailingSpaces(input);
+    trimRightTrailingSpaces(input);
+    input = input.substr(1, input.length() - 2);
+    stringstream ss;
+    ss.str(input);
+    string item;
+    char delim = ',';
+    while (getline(ss, item, delim)) {
+        item = item.substr(1, item.length() - 2);
+        output.push_back(item);
     }
-    ptr = dummyRoot->next;
-    delete dummyRoot;
-    return ptr;
+    return output;
+}
+
+vector<vector<int>> stringToIntegerVectorVector(string input) {
+    vector<vector<int>> output;
+    trimLeftTrailingSpaces(input);
+    trimRightTrailingSpaces(input);
+    input = input.substr(1, input.length() - 2);
+    stringstream ss;
+    ss.str(input);
+    string item;
+    char delim = ']';
+
+    getline(ss, item, delim);
+    if(item.size())
+        output.push_back(stringToIntegerVector(item + "]"));
+
+    while(getline(ss, item, delim)) {
+        item = item.substr(1, item.size()-1);
+        output.push_back(stringToIntegerVector(item + "]"));
+    }
+    return output;
 }
 
 // @lc code=start
 class Solution {
 public:
-    // AC
-    vector<vector<int>> threeSum(vector<int>& nums) {
-        int target = 0;
-        vector<vector<int>> result;
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        vector<vector<int>> res;
+        sort(nums.begin(), nums.end());
+
         int n = nums.size();
 
-        sort(nums.begin(), nums.end());
-        int a, b, c;
         for(int i = 0; i < n; ) {
-            a = nums[i];
-            for (int j = i+1, k = n - 1; j < k; ) {
+            int a = nums[i];
+            for(int j = i+1; j < n; ) {
                 int b = nums[j];
-                int c = nums[k];
-                int sum = a + b + c;
-                if(sum < target) {
-                    j++;
-                } else if (sum > target) {
-                    k--;
-                } else {
-                    // cout << a << " " << b << " " << c << endl;
-                    vector<int> r;
-                    r.push_back(a);
-                    r.push_back(b);
-                    r.push_back(c);
-
-                    result.push_back(r);
-                    while(j < k && nums[j]==b) ++j;
-                    while(j < k && nums[k]==c) --k;
+                for(int k = j+1, l = n-1; k < l;) {
+                    int c = nums[k];
+                    int d = nums[l];
+                    int sum = a + b + c + d;
+                    if(sum == target) {
+                        vector<int> r {a, b, c, d};
+                        res.push_back(r);
+                        while(k < l && nums[k] == c) k++;
+                        while(k < l && nums[l] == d) l--;
+                    } else if (sum < target) {
+                        while(k < l && nums[k] == c) k++;
+                    } else {
+                        while(k < l && nums[l] == d) --l;
+                    }
                 }
+                while(j < n && nums[j] == b) ++j;
             }
             while(i < n && nums[i] == a) ++i;
         }
-
-        return result;
+        return res;
     }
 };
 // @lc code=end
 
+
 int main() {
+
     #ifdef LOCAL
-        fr("./tc.in");
-        fw("./tc.out");
+        fr("./0tc.in");
+        fw("./0tc.out");
         ios::sync_with_stdio(false);
         cin.tie(nullptr);
         cout.tie(nullptr);
     #endif
     string str;
+    int target;
     Solution s;
-    while( cin >> str ) {
+    while( cin >> str >> target ) {
         vi nums = stringToIntegerVector(str);
-        auto res = s.threeSum(nums);
+        auto res = s.fourSum(nums, target);
         dbg(res);
     }
     return 0;
