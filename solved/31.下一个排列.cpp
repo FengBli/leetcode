@@ -1,7 +1,7 @@
 /*
- * @lc app=leetcode.cn id=1365 lang=cpp
+ * @lc app=leetcode.cn id=31 lang=cpp
  *
- * [1365] 有多少小于当前数字的数字
+ * [31] 下一个排列
  */
 #pragma GCC optimize("Ofast")
 #include "bits/stdc++.h"
@@ -59,14 +59,6 @@ void debug_out(Head H, Tail... T) {
 #define dbg(...) {}
 #endif
 
-struct ListNode {
-    int val;
-    ListNode *next;
-    ListNode() : val(0), next(nullptr) {}
-    ListNode(int x) : val(x), next(nullptr) {}
-    ListNode(int x, ListNode *next) : val(x), next(next) {}
- };
-
 void trimLeftTrailingSpaces(string &input) {
     input.erase(input.begin(), find_if(input.begin(), input.end(), [](int ch) {
         return !isspace(ch);
@@ -93,43 +85,51 @@ vector<int> stringToIntegerVector(string input) {
     }
     return output;
 }
-ListNode* stringToListNode(string input) {
-    // Generate list from the input
-    vector<int> list = stringToIntegerVector(input);
 
-    // Now convert that list into linked list
-    ListNode* dummyRoot = new ListNode(0);
-    ListNode* ptr = dummyRoot;
-    for(int item : list) {
-        ptr->next = new ListNode(item);
-        ptr = ptr->next;
+vector<string> stringToStringVector(string input) {
+    vector<string> output;
+    trimLeftTrailingSpaces(input);
+    trimRightTrailingSpaces(input);
+    input = input.substr(1, input.length() - 2);
+    stringstream ss;
+    ss.str(input);
+    string item;
+    char delim = ',';
+    while (getline(ss, item, delim)) {
+        item = item.substr(1, item.length() - 2);
+        output.push_back(item);
     }
-    ptr = dummyRoot->next;
-    delete dummyRoot;
-    return ptr;
+    return output;
 }
 
+vector<vector<int>> stringToIntegerVectorVector(string input) {
+    vector<vector<int>> output;
+    trimLeftTrailingSpaces(input);
+    trimRightTrailingSpaces(input);
+    input = input.substr(1, input.length() - 2);
+    stringstream ss;
+    ss.str(input);
+    string item;
+    char delim = ']';
+
+    getline(ss, item, delim);
+    if(item.size())
+        output.push_back(stringToIntegerVector(item + "]"));
+
+    while(getline(ss, item, delim)) {
+        item = item.substr(1, item.size()-1);
+        output.push_back(stringToIntegerVector(item + "]"));
+    }
+    return output;
+}
 
 // @lc code=start
 class Solution {
 public:
-    vector<int> smallerNumbersThanCurrent(vector<int>& nums) {
-        vector<int> nums_temp(nums);
-
-        sort(nums.begin(), nums.end());
-        vector<int> res;
-        map<int, int> ps;
-        for(int i = 0; i < nums.size(); ++i) {
-            if(ps.find(nums[i]) == ps.end()) {
-                ps.emplace(nums[i], i);
-            }
-        }
-
-        for(auto i : nums_temp) {
-            res.push_back(ps[i]);
-        }
-
-        return res;
+    // AC, using stl
+    // Daily challenge of 10 Nov, 2020
+    void nextPermutation(vector<int>& nums) {
+        std::next_permutation(nums.begin(), nums.end());
     }
 };
 // @lc code=end
@@ -147,8 +147,9 @@ int main() {
     string str;
     Solution s;
     while( cin >> str ) {
-        auto nums = stringToIntegerVector(str);
-        auto res = s.smallerNumbersThanCurrent(nums);
+        vi nums = stringToIntegerVector(str);
+        s.nextPermutation(nums);
+        dbg(nums);
     }
     return 0;
 }

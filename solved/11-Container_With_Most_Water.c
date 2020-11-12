@@ -1,3 +1,5 @@
+#include< limits.h>
+
 // brute force
 int maxArea(int* height, int heightSize) {
     int i, j;

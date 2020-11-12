@@ -1,7 +1,7 @@
 /*
- * @lc app=leetcode.cn id=1365 lang=cpp
+ * @lc app=leetcode.cn id=143 lang=cpp
  *
- * [1365] 有多少小于当前数字的数字
+ * [143] 重排链表
  */
 #pragma GCC optimize("Ofast")
 #include "bits/stdc++.h"
@@ -109,31 +109,80 @@ ListNode* stringToListNode(string input) {
     return ptr;
 }
 
-
 // @lc code=start
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
 class Solution {
 public:
-    vector<int> smallerNumbersThanCurrent(vector<int>& nums) {
-        vector<int> nums_temp(nums);
+    void reorderList(ListNode* head) {
+        int size = 1;
+        if(nullptr == head || nullptr == head->next)
+            return;
 
-        sort(nums.begin(), nums.end());
-        vector<int> res;
-        map<int, int> ps;
-        for(int i = 0; i < nums.size(); ++i) {
-            if(ps.find(nums[i]) == ps.end()) {
-                ps.emplace(nums[i], i);
-            }
+        ListNode *ptr = head;
+        ListNode *mid = head;
+        while(ptr->next) {
+            ptr = ptr->next;
+            ++size;
+            if(0 == size%2) mid = mid->next;
+            
+        }
+        if( 2 == size ) return;
+
+        // reverse the second half
+        ListNode *cur = (size%2 == 1) ? mid->next : mid;
+
+        ListNode *q = cur->next;
+        ListNode *p = cur;
+
+
+        for(int i = 0; i < size/2; ++i) {
+            if( cur == p ) cur->next = nullptr;
+            else cur->next = p;
+
+            p = cur;
+            cur = q;
+            if(q && q->next)
+                q = q->next;
         }
 
-        for(auto i : nums_temp) {
-            res.push_back(ps[i]);
+        mid->next = nullptr;
+
+        ptr = head;
+        while(ptr != mid) {
+            cur = ptr->next;
+            q = p->next;
+
+            ptr->next = p;
+            p->next = cur;
+
+            ptr = cur;
+            p = q;
         }
 
-        return res;
+        while(p) {
+            cout << p->val << " ";
+            p = p->next;
+        }
+        cout << endl;
+
+        p = head;
+        while(p) {
+            cout << p->val << " ";
+            p = p->next;
+        }
+        cout << endl;
     }
 };
 // @lc code=end
-
 
 int main() {
 
@@ -144,11 +193,12 @@ int main() {
         cin.tie(nullptr);
         cout.tie(nullptr);
     #endif
+
     string str;
     Solution s;
-    while( cin >> str ) {
-        auto nums = stringToIntegerVector(str);
-        auto res = s.smallerNumbersThanCurrent(nums);
+    while(cin >> str) {
+        ListNode *head = stringToListNode(str);
+        s.reorderList(head);
     }
-    return 0;
+
 }

@@ -1,7 +1,7 @@
 /*
- * @lc app=leetcode.cn id=763 lang=cpp
+ * @lc app=leetcode.cn id=514 lang=cpp
  *
- * [763] 划分字母区间
+ * [514] 自由之路
  */
 #pragma GCC optimize("Ofast")
 #include "bits/stdc++.h"
@@ -62,67 +62,33 @@ void debug_out(Head H, Tail... T) {
 // @lc code=start
 class Solution {
 public:
-    vector<int> partitionLabels(string S) {
-        int size = S.size();
-        vector<pair<int, int>> ss(26, make_pair(-1, -1));
-        
-        for( int i = 0; i < size; ++i) {
-            char c = S.at(i);
-            int idx = c - 'a';
+    // TODO: hard
+    int findRotateSteps(string ring, string key) {
+        int n = ring.length();
+        int m = key.length();
 
-            if(ss[idx].first == -1) {
-                ss[idx].first = i;
-            } else {
-                ss[idx].second = i;
-            }
+        for(int i = 0; i < m ; ++i) {
+            char c = key.at(i);
+            
         }
-
-        sort(ss.begin(), ss.end(), [] (const auto &a, const auto &b) {
-            return a.first < b.first;
-        });
-
-        vector<int> res;
-
-        int sp = 0;
-        int ep = -1;
-        
-        for(int i = 0; i < 26; ++i) {
-            int a = ss[i].first;
-            if(a != -1) {
-                int b = (ss[i].second == -1) ? a : ss[i].second;
-                if( a < ep ) {
-                    ep = (ep > b) ? ep : b;
-                } else {
-                    res.push_back(ep - sp + 1);
-                    sp = a;
-                    ep = b;
-                }
-            }
-        }
-        res.erase(res.begin());
-        res.push_back(ep - sp + 1);
-
-        return res;
     }
 };
 // @lc code=end
 
+
 int main() {
+
     #ifdef LOCAL
-    fr("./tc.in");
-    fw("./tc.out");
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
+        fr("./0_in.tc");
+        fw("./0_out.tc");
+        ios::sync_with_stdio(false);
+        cin.tie(nullptr);
+        cout.tie(nullptr);
     #endif
-
-    string str;
+    string str, key;
     Solution s;
-    while(cin >> str) {
-        auto res = s.partitionLabels(str);
-        dbg(res);
+    while( cin >> str >> key) {
+        auto res = s.findRotateSteps(str, key);
     }
-
-    
-
+    return 0;
 }

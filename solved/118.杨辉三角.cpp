@@ -85,8 +85,8 @@ public:
 int main() {
 
     #ifdef LOCAL
-        fr("./0tc.in");
-        fw("./0tc.out");
+        fr("./0_in.tc");
+        fw("./0_out.tc");
         ios::sync_with_stdio(false);
         cin.tie(nullptr);
         cout.tie(nullptr);

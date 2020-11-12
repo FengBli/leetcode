@@ -108,8 +108,8 @@ public:
 
 #ifdef LOCAL
 int main() {
-    fr("/home/sept/Music/leetcode/tc.in");
-    fw("/home/sept/Music/leetcode/tc.out");
+    fr("/home/sept/Music/leetcode/0_in.tc");
+    fw("/home/sept/Music/leetcode/0_out.tc");
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);

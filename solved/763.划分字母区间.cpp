@@ -1,4 +1,8 @@
-#pragma GCC optimize("Ofast")
+/*
+ * @lc app=leetcode.cn id=763 lang=cpp
+ *
+ * [763] 划分字母区间
+ */
 #pragma GCC optimize("Ofast")
 #include "bits/stdc++.h"
 #include "ext/pb_ds/tree_policy.hpp"
@@ -13,7 +17,6 @@
 #define fw(x) freopen(x, "w", stdout)
 #define REP(x, l, u) for(ll x = l; x < u; x++)
 #define RREP(x, l, u) for(ll x = l; x >= u; x--)
-#define LOCAL 1
 
 using namespace __gnu_pbds;
 using namespace std;
@@ -56,65 +59,70 @@ void debug_out(Head H, Tail... T) {
 #define dbg(...) {}
 #endif
 
-void trimLeftTrailingSpaces(string &input) {
-    input.erase(input.begin(), find_if(input.begin(), input.end(), [](int ch) {
-        return !isspace(ch);
-    }));
-}
-
-void trimRightTrailingSpaces(string &input) {
-    input.erase(find_if(input.rbegin(), input.rend(), [](int ch) {
-        return !isspace(ch);
-    }).base(), input.end());
-}
-
-vi string2vector(string input) {
-    vi res;
-    trimLeftTrailingSpaces(input);
-    trimRightTrailingSpaces(input);
-    input = input.substr(1, input.length() - 2);
-    stringstream ss;
-    ss.str(input);
-    string item;
-    char delim = ',';
-    while (getline(ss, item, delim)) {
-        res.push_back(stoi(item));
-    }
-    return res;
-}
-
-
+// @lc code=start
 class Solution {
 public:
-    int bestTeamScore(vector<int>& scores, vector<int>& ages) {
-        return 0;
+    vector<int> partitionLabels(string S) {
+        int size = S.size();
+        vector<pair<int, int>> ss(26, make_pair(-1, -1));
+        
+        for( int i = 0; i < size; ++i) {
+            char c = S.at(i);
+            int idx = c - 'a';
+
+            if(ss[idx].first == -1) {
+                ss[idx].first = i;
+            } else {
+                ss[idx].second = i;
+            }
+        }
+
+        sort(ss.begin(), ss.end(), [] (const auto &a, const auto &b) {
+            return a.first < b.first;
+        });
+
+        vector<int> res;
+
+        int sp = 0;
+        int ep = -1;
+        
+        for(int i = 0; i < 26; ++i) {
+            int a = ss[i].first;
+            if(a != -1) {
+                int b = (ss[i].second == -1) ? a : ss[i].second;
+                if( a < ep ) {
+                    ep = (ep > b) ? ep : b;
+                } else {
+                    res.push_back(ep - sp + 1);
+                    sp = a;
+                    ep = b;
+                }
+            }
+        }
+        res.erase(res.begin());
+        res.push_back(ep - sp + 1);
+
+        return res;
     }
 };
+// @lc code=end
 
-
-#ifdef LOCAL
 int main() {
-    
-    fr("/home/sept/Music/leetcode/tc.in");
-    fw("/home/sept/Music/leetcode/tc.out");
-    
-
+    #ifdef LOCAL
+    fr("./0_in.tc");
+    fw("./0_out.tc");
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    
-    string s1, s2;
-    cin >> s1;
-    cin >> s2;
+    #endif
 
-    vi s, a;
-    s = string2vector(s1);
-    a = string2vector(s2);
-    
-    Solution so;
-    int res = so.bestTeamScore(s, a);
-    cout << "res = " << res << endl;
+    string str;
+    Solution s;
+    while(cin >> str) {
+        auto res = s.partitionLabels(str);
+        dbg(res);
+    }
 
-    return 0;
+    
+
 }
-#endif

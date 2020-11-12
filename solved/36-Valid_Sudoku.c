@@ -1,4 +1,7 @@
 // Status: AC, 8ms, beats 100%
+#include <stdio.h>
+#include <stdlib.h>
+#include <bool>
 
 bool isValidSudoku(char** board, int boardRowSize, int boardColSize) {
     int i, j, k, s, t;

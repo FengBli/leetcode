@@ -1,8 +1,4 @@
-/*
- * @lc app=leetcode.cn id=31 lang=cpp
- *
- * [31] 下一个排列
- */
+#pragma GCC optimize("Ofast")
 #pragma GCC optimize("Ofast")
 #include "bits/stdc++.h"
 #include "ext/pb_ds/tree_policy.hpp"
@@ -13,6 +9,7 @@
 #define MP make_pair
 #define se second
 #define fi first
+#define LOCAL 1
 #define fr(x) freopen(x, "r", stdin)
 #define fw(x) freopen(x, "w", stdout)
 #define REP(x, l, u) for(ll x = l; x < u; x++)
@@ -71,8 +68,8 @@ void trimRightTrailingSpaces(string &input) {
     }).base(), input.end());
 }
 
-vector<int> stringToIntegerVector(string input) {
-    vector<int> output;
+vi string2vector(string input) {
+    vi res;
     trimLeftTrailingSpaces(input);
     trimRightTrailingSpaces(input);
     input = input.substr(1, input.length() - 2);
@@ -81,73 +78,69 @@ vector<int> stringToIntegerVector(string input) {
     string item;
     char delim = ',';
     while (getline(ss, item, delim)) {
-        output.push_back(stoi(item));
+        res.push_back(stoi(item));
     }
-    return output;
+    return res;
 }
 
-vector<string> stringToStringVector(string input) {
-    vector<string> output;
-    trimLeftTrailingSpaces(input);
-    trimRightTrailingSpaces(input);
-    input = input.substr(1, input.length() - 2);
-    stringstream ss;
-    ss.str(input);
-    string item;
-    char delim = ',';
-    while (getline(ss, item, delim)) {
-        item = item.substr(1, item.length() - 2);
-        output.push_back(item);
-    }
-    return output;
-}
-
-vector<vector<int>> stringToIntegerVectorVector(string input) {
-    vector<vector<int>> output;
-    trimLeftTrailingSpaces(input);
-    trimRightTrailingSpaces(input);
-    input = input.substr(1, input.length() - 2);
-    stringstream ss;
-    ss.str(input);
-    string item;
-    char delim = ']';
-
-    getline(ss, item, delim);
-    if(item.size())
-        output.push_back(stringToIntegerVector(item + "]"));
-
-    while(getline(ss, item, delim)) {
-        item = item.substr(1, item.size()-1);
-        output.push_back(stringToIntegerVector(item + "]"));
-    }
-    return output;
-}
-
-// @lc code=start
 class Solution {
 public:
-    void nextPermutation(vector<int>& nums) {
-        std::next_permutation(nums.begin(), nums.end());
+    int bestTeamScore(vector<int> &scores, vector<int> &ages) {
+        vector<pair<int, int>> ps;
+        int res = -1;
+
+        int n = scores.size();
+        for(int i = 0; i < n; ++i) {
+            ps.emplace_back(scores[i], ages[i]);
+        }
+
+        sort(ps.begin(), ps.end(), [](auto &a, auto &b) {
+            if(a.first != b.first)
+                return a.first < b.first;
+            else 
+                return a.second < b.second;
+        });
+        
+        cout << "s\ta" << endl;
+        for(auto it = ps.begin(); it < ps.end(); ++it) {
+            cout << it->first << "\t" << it->second << endl;
+        }
+
+        int temp_sum = ps.begin()->first;
+        auto prev = ps.begin();
+        for(auto it = (++ps.begin()); it < ps.end(); ++prev, ++it) {
+            if(it->second <= prev->second)
+                temp_sum += (*it).first;
+            else {
+                res = (res > temp_sum) ? res : temp_sum;
+                temp_sum = (*it).first;
+            }
+        }
+
+        res = (res > temp_sum) ? res : temp_sum;
+        return res;
     }
 };
-// @lc code=end
 
-
+#ifdef LOCAL
 int main() {
-
-    #ifdef LOCAL
-        fr("./0tc.in");
-        fw("./0tc.out");
-        ios::sync_with_stdio(false);
-        cin.tie(nullptr);
-        cout.tie(nullptr);
-    #endif
-    string str;
+    fr("/home/sept/Music/leetcode/0_in.tc");
+    fw("/home/sept/Music/leetcode/0_out.tc");
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
     Solution s;
-    while( cin >> str ) {
-        vi nums = stringToIntegerVector(str);
-        s.nextPermutation(nums);
-        dbg(nums);
+
+    string s1, s2;
+    while(cin >> s1 >> s2) {
+        // cin >> s1;
+        // cin >> s2;
+        vi a = string2vector(s1);
+        vi b = string2vector(s2);
+        auto res = s.bestTeamScore(a, b);
+        cout << "res = " << res << endl;
+        cout << "===================" << endl;
     }
-    return 0;
+    
 }
+#endif

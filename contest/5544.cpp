@@ -9,11 +9,11 @@
 #define MP make_pair
 #define se second
 #define fi first
-#define LOCAL 1
 #define fr(x) freopen(x, "r", stdin)
 #define fw(x) freopen(x, "w", stdout)
 #define REP(x, l, u) for(ll x = l; x < u; x++)
 #define RREP(x, l, u) for(ll x = l; x >= u; x--)
+#define LOCAL 1
 
 using namespace __gnu_pbds;
 using namespace std;
@@ -83,64 +83,38 @@ vi string2vector(string input) {
     return res;
 }
 
+
 class Solution {
 public:
-    int bestTeamScore(vector<int> &scores, vector<int> &ages) {
-        vector<pair<int, int>> ps;
-        int res = -1;
-
-        int n = scores.size();
-        for(int i = 0; i < n; ++i) {
-            ps.emplace_back(scores[i], ages[i]);
-        }
-
-        sort(ps.begin(), ps.end(), [](auto &a, auto &b) {
-            if(a.first != b.first)
-                return a.first < b.first;
-            else 
-                return a.second < b.second;
-        });
-        
-        cout << "s\ta" << endl;
-        for(auto it = ps.begin(); it < ps.end(); ++it) {
-            cout << it->first << "\t" << it->second << endl;
-        }
-
-        int temp_sum = ps.begin()->first;
-        auto prev = ps.begin();
-        for(auto it = (++ps.begin()); it < ps.end(); ++prev, ++it) {
-            if(it->second <= prev->second)
-                temp_sum += (*it).first;
-            else {
-                res = (res > temp_sum) ? res : temp_sum;
-                temp_sum = (*it).first;
-            }
-        }
-
-        res = (res > temp_sum) ? res : temp_sum;
-        return res;
+    int bestTeamScore(vector<int>& scores, vector<int>& ages) {
+        return 0;
     }
 };
 
+
 #ifdef LOCAL
 int main() {
-    fr("/home/sept/Music/leetcode/tc.in");
-    fw("/home/sept/Music/leetcode/tc.out");
+    
+    fr("/home/sept/Music/leetcode/0_in.tc");
+    fw("/home/sept/Music/leetcode/0_out.tc");
+    
+
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-    Solution s;
-
-    string s1, s2;
-    while(cin >> s1 >> s2) {
-        // cin >> s1;
-        // cin >> s2;
-        vi a = string2vector(s1);
-        vi b = string2vector(s2);
-        auto res = s.bestTeamScore(a, b);
-        cout << "res = " << res << endl;
-        cout << "===================" << endl;
-    }
     
+    string s1, s2;
+    cin >> s1;
+    cin >> s2;
+
+    vi s, a;
+    s = string2vector(s1);
+    a = string2vector(s2);
+    
+    Solution so;
+    int res = so.bestTeamScore(s, a);
+    cout << "res = " << res << endl;
+
+    return 0;
 }
 #endif

@@ -3,11 +3,12 @@
 *.out
 
 # test case input and output
-0tc.in
-0tc.out
+0_in.tc
+0_out.tc
 
 # vscode configuration
 .vscode/*
 .vscode
 
 .DS_Store
+*dSYM/
