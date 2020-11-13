@@ -5,6 +5,7 @@
  */
 #pragma GCC optimize("Ofast")
 #include "bits/stdc++.h"
+
 #include "ext/pb_ds/tree_policy.hpp"
 #include "ext/pb_ds/assoc_container.hpp"
 
@@ -61,16 +62,54 @@ void debug_out(Head H, Tail... T) {
 
 // @lc code=start
 class Solution {
+private:
+    int Min(int a, int b) { return a < b ? a : b; }
 public:
-    // TODO: hard
+    // AC: hard
+    // DP, T(n) = O(|ring|^2 * |key|)
     int findRotateSteps(string ring, string key) {
         int n = ring.length();
         int m = key.length();
 
+        int **dp = (int**) malloc(sizeof(int*)*m);
+        for(int i = 0; i < m; ++i) {
+            dp[i] = (int*) malloc(sizeof(int)*n);
+            memset(dp[i], 0, sizeof(int)*n);
+        }
+        int start = 0;
         for(int i = 0; i < m ; ++i) {
             char c = key.at(i);
-            
+            for(int j = 0; j < n; ++j) {
+                char d = ring.at(j);
+                if(c == d) {
+                    if (i == 0) {
+                        int clockwise = abs(j - start);
+                        int antiClockwise = n - abs(j - start);
+
+                        dp[i][j] = Min(clockwise, antiClockwise) + 1;
+                    } else {
+                        int r = INT_MAX;
+                        for(int k = 0; k < n; ++k) {
+                            if(dp[i-1][k] == 0) continue;
+                            int clockwise = abs(j - k);
+                            int antiClockwise = n - abs(j - k);
+                            int tmp = Min(clockwise, antiClockwise) + 1;
+                            tmp += dp[i-1][k];
+                            r = Min(tmp, r);
+                        }
+                        dp[i][j] = r;
+
+                    }
+                }
+            }
         }
+
+        int res = INT_MAX;
+        for(int i = 0; i < n; ++i) {
+            if(dp[m-1][i] == 0) continue;
+            res = Min(res, dp[m-1][i]);
+        }
+        return res;
     }
 };
 // @lc code=end
@@ -79,8 +118,8 @@ public:
 int main() {
 
     #ifdef LOCAL
-        fr("./0_in.tc");
-        fw("./0_out.tc");
+        fr("../0_in.tc");
+        fw("../0_out.tc");
         ios::sync_with_stdio(false);
         cin.tie(nullptr);
         cout.tie(nullptr);
@@ -89,6 +128,7 @@ int main() {
     Solution s;
     while( cin >> str >> key) {
         auto res = s.findRotateSteps(str, key);
+        cout << "res = " << res << endl;
     }
     return 0;
 }
