@@ -1,7 +1,7 @@
 /*
- * @lc app=leetcode.cn id=140 lang=cpp
+ * @lc app=leetcode.cn id=48 lang=cpp
  *
- * [140] 单词拆分 II
+ * [48] 旋转图像
  */
 #pragma GCC optimize("Ofast")
 #include "bits/stdc++.h"
@@ -58,8 +58,6 @@ void debug_out(Head H, Tail... T) {
 #else
 #define dbg(...) {}
 #endif
-
-
 void trimLeftTrailingSpaces(string &input) {
     input.erase(input.begin(), find_if(input.begin(), input.end(), [](int ch) {
         return !isspace(ch);
@@ -103,102 +101,50 @@ vector<string> stringToStringVector(string input) {
     return output;
 }
 
+vector<vector<int>> stringToIntegerVectorVector(string input) {
+    vector<vector<int>> output;
+    trimLeftTrailingSpaces(input);
+    trimRightTrailingSpaces(input);
+    input = input.substr(1, input.length() - 2);
+    stringstream ss;
+    ss.str(input);
+    string item;
+    char delim = ']';
+
+    getline(ss, item, delim);
+    if(item.size())
+        output.push_back(stringToIntegerVector(item + "]"));
+
+    while(getline(ss, item, delim)) {
+        item = item.substr(1, item.size()-1);
+        output.push_back(stringToIntegerVector(item + "]"));
+    }
+    return output;
+}
 
 // @lc code=start
 class Solution {
-private:
-    map<int, set<string>> memo;
-    set<string> wordset;
-    set<int> lenset;
-    string target;
-
-    void dp(string s, int i, set<string> &wordDict, set<int> lenSet, vector<string> &res, string output) {
-        if(i == 0) {
-            res.push_back(output);
-            return;
-        }
-
-        for(auto l : lenSet) {
-            if(i-l+1 < 1) continue;
-            string ss = s.substr(i-l+1, l);
-            if(wordDict.find(ss) != wordDict.end()){
-                string newoutput = (output.size()==0) ? ss : ss + " " + output;
-
-                dp(s, i-l, wordDict, lenSet, res, newoutput);
-            }
-        }
-    }
-
-    void backtrace(int i) {
-        if (i == 0) {
-            this->memo[i] = {""};
-        }
-
-        for(auto l : this->lenset) {
-            if(i+1+l > this->target.size()) continue;
-            string ss = target.substr(i+1, l);
-            if(wordset.find(ss) != wordset.end()) {
-                auto prefs = this->memo[i];
-                for(string s : prefs) {
-                    this->memo[i+l].emplace((s.size() == 0) ? ss : (s + " " + ss));
-                }
-                backtrace(i+l);
-            }
-        }
-
-    }
-
 public:
-    // TLE
-    vector<string> wordBreak_recursive(string s, vector<string>& wordDict) {
+    // AC
+    void rotate(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        int m = n;
+        if (n == 0) return;
 
-        // this->target = "#" + s;
-        set<int> lenSet;
-        vector<string> res;
-        set<string> wd;
-        
-        for(auto w : wordDict) {
-            lenSet.emplace(w.size());
-            wd.emplace(w);
+        for(int i = 0; i < n/2; ++i) {
+            for(int j = 0; j < n-1-i*2; ++j) {
+                int temp = matrix[i][i+j];
+                matrix[i][i+j] =  matrix[n-1-i-j][i];
+                matrix[n-1-i-j][i] = matrix[n-i-1][n-i-1-j];
+                matrix[n-i-1][n-i-1-j] = matrix[i+j][n-1-i];
+                matrix[i+j][n-1-i] = temp;
+            }
+            cout << endl;
         }
-
-        int len = s.size();
-        string output = "";
-        s = "#" + s;
-        dp(s, len, wd, lenSet, res, output);
-
-        return res;
     }
-
-
-    // TODO
-    vector<string> wordBreak(string s, vector<string> &wordDict) {
-        this->target = "#" + s;
-
-        this->lenset.clear();
-        this->memo.clear();
-        this->wordset.clear();
-
-        for(auto w : wordDict) {
-            this->lenset.emplace(w.size());
-            this->wordset.emplace(w);
-        }
-
-        int size = s.size();
-        for(int i = 0; i <= size; ++i) {
-            set<string> s;
-            this->memo.emplace(i, s);
-        }
-
-        backtrace(0);
-
-        auto r = this->memo[size];
-        vector<string> res(r.begin(), r.end());
-        return res;
-    }
-
 };
 // @lc code=end
+
 
 int main() {
 
@@ -211,23 +157,11 @@ int main() {
     #endif
 
     string str;
-    string s2;
     Solution s;
-    while(cin >> str >> s2) {
-        
-        auto vs = stringToStringVector(s2);
-        
-        vector<string> res = s.wordBreak(str, vs);
-        for (auto a : res) {
-            cout << a << endl;
-        }
-        cout << "=====" << endl;
+    while( cin >> str ) {
+        auto matrix = stringToIntegerVectorVector(str);
+        s.rotate(matrix);
+        dbg(matrix);
     }
     return 0;
 }
-
-/*
-// TLE case 
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-{"a","aa","aaa","aaaa","aaaaa","aaaaaa","aaaaaaa","aaaaaaaa","aaaaaaaaa","aaaaaaaaaa"}
-*/

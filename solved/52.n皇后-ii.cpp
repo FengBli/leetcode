@@ -1,9 +1,8 @@
 /*
- * @lc app=leetcode.cn id=51 lang=cpp
+ * @lc app=leetcode.cn id=52 lang=cpp
  *
- * [51] N皇后
+ * [52] N皇后 II
  */
-#pragma GCC optimize("Ofast")
 #pragma GCC optimize("Ofast")
 #include "bits/stdc++.h"
 #include "ext/pb_ds/tree_policy.hpp"
@@ -14,7 +13,6 @@
 #define MP make_pair
 #define se second
 #define fi first
-#define LOCAL 1
 #define fr(x) freopen(x, "r", stdin)
 #define fw(x) freopen(x, "w", stdout)
 #define REP(x, l, u) for(ll x = l; x < u; x++)
@@ -64,7 +62,10 @@ void debug_out(Head H, Tail... T) {
 // @lc code=start
 class Solution {
 public:
-    bool pass(vector<vector<bool>> &bds, int row, int col, int n) {
+    // AC
+    int res = 0;
+    vector<vector<bool>> bds;
+    bool pass(int row, int col, int n) {
 
         int vsum = 0;
         int dsum = 0;
@@ -79,7 +80,7 @@ public:
             dsum += bds[row-i][col-i];
         }
 
-        j = (row<(n-col))?row:(n-col);
+        j = (row<(n-col-1))?row:(n-col-1);
         for(int i =0; i <= j; ++i) {
             ddsum += bds[row-i][col+i];
         }
@@ -89,64 +90,51 @@ public:
         return true;
     }
 
-    void check(vector<vector<bool>> &bds, int row, int n, vector<vector<string>> &res) {
-
+    void check(int row, int n) {
         for(int i = 0; i < n; ++i) {
             bds[row][i] = true;
-            if(pass(bds, row, i, n)) {
+            if(pass(row, i, n)) {
                 if(row < n-1)
-                    check(bds, row+1, n, res);
+                    check(row+1, n);
                 else{
-                    vector<string> rr;
-                    for(auto r : bds) {
-                        string rs = "";
-                        for(auto item : r) {
-                            if(item) rs += "Q";
-                            else rs += ".";
-                        }
-                        rr.push_back(rs);
-                    }
-                    res.push_back(rr);
+                    this->res++;
                 } 
             }
             bds[row][i] = false;
         }
     }
 
-    vector<vector<string>> solveNQueens(int n) {
-        vector<vector<bool>> bds;
+    int totalNQueens(int n) {
+        this->bds.clear();
+        this->res = 0;
+
         for(int i = 0; i < n; ++i){
             vector<bool> bd(n, false);
             bds.emplace_back(bd);
         }
 
-        vector<vector<string>> res;
-        check(bds, 0, n, res);
-        bds.clear();
-
-        return res;
+        check(0, n);
+        return this->res;
     }
 };
+
 // @lc code=end
 
-#ifdef LOCAL
-int main() {
-    fr("/home/sept/Music/leetcode/0_in.tc");
-    fw("/home/sept/Music/leetcode/0_out.tc");
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
-    Solution s;
-    int n = 0;
-    cin >> n;
-    auto res = s.solveNQueens(n);
 
-    for(auto row : res) {
-        for(auto item : row) {
-            cout << item << endl;
-        }
-        cout << "========================" << endl;
+int main() {
+
+    #ifdef LOCAL
+        fr("0_in.tc");
+        fw("0_out.tc");
+        ios::sync_with_stdio(false);
+        cin.tie(nullptr);
+        cout.tie(nullptr);
+    #endif
+    int str;
+    Solution s;
+    while( cin >> str ) {
+        auto res = s.totalNQueens(str);
+        cout << "nQueens(" << str << ") = " << res << endl;
     }
-    
+    return 0;
 }
-#endif
